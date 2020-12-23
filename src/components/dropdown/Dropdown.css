@@ -1,0 +1,9 @@
+.highlight {
+  color: #1e2125;
+  background-color: #58a2eb;
+}
+
+.listContainer {
+  position: absolute;
+  width: 100%;
+}
