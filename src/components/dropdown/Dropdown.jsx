@@ -1,14 +1,18 @@
-import React, { useEffect, useRef } from 'react';
-import './Dropdown.css';
+import React, { useEffect, useRef } from "react";
+import "./Dropdown.css";
 
-const DropDown = ({ suggestions, handleSelection, highlightedSuggestion, closeDropdown }) => {
-
+const DropDown = ({
+  suggestions,
+  handleSelection,
+  highlightedSuggestion,
+  closeDropdown,
+}) => {
   const dropdownRef = useRef();
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleOutsideClick, false);
+    document.addEventListener("mousedown", handleOutsideClick, false);
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick, false);
+      document.removeEventListener("mousedown", handleOutsideClick, false);
     };
   }, []);
 
@@ -17,15 +21,22 @@ const DropDown = ({ suggestions, handleSelection, highlightedSuggestion, closeDr
       return;
     }
 
-    // Close the dropdown 
+    // Close the dropdown
     closeDropdown();
-  }
- 
+  };
+
   return (
-    <ul ref={dropdownRef} className={`dropdown-menu dropdown-menu-end ${suggestions.length > 0 ? 'show' : 'hide'}`}>
+    <ul
+      ref={dropdownRef}
+      className={`dropdown-menu dropdown-menu-end ${
+        suggestions.length > 0 ? "show" : "hide"
+      }`}
+    >
       {suggestions.map((suggestion, index) => (
         <li
-          className={`dropdown-item ${highlightedSuggestion === index && 'highlight'}`}
+          className={`dropdown-item ${
+            highlightedSuggestion === index && "highlight"
+          }`}
           key={suggestion}
           onClick={() => handleSelection(suggestion)}
         >
@@ -34,6 +45,6 @@ const DropDown = ({ suggestions, handleSelection, highlightedSuggestion, closeDr
       ))}
     </ul>
   );
-}
+};
 
 export default DropDown;
