@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { debounce } from "lodash";
 import DropDown from "../dropdown/Dropdown";
 import getSuggestions from "../../api/api";
 
@@ -12,18 +13,13 @@ const Autocomplete = () => {
     const lastText = text.split(" ").slice(-1)[0];
     const textToSearch = event.target.value.split(" ").slice(-1)[0];
 
+    const debouncedFunction = debounce(getSuggestionsForWord, 400);
+
     setText(event.target.value);
 
     // Checking if the last text is empty or the last word has changes
     if (!!textToSearch && lastText !== textToSearch) {
-      getSuggestions(textToSearch)
-        .then((data) => {
-          setSuggestions(data);
-          setHighlightedSuggestion(0);
-        })
-        .catch(() => {
-          console.log("Got error in getting data");
-        });
+      debouncedFunction(textToSearch);
     } else {
       resetSuggestions();
     }
@@ -68,6 +64,16 @@ const Autocomplete = () => {
       );
     } else if (keyPressed === 13) {
       handleSelection(suggestions[highlightedSuggestion]);
+    }
+  };
+
+  const getSuggestionsForWord = async (text) => {
+    try {
+      const suggestions = await getSuggestions(text);
+      setSuggestions(suggestions);
+      setHighlightedSuggestion(0);
+    } catch (error) {
+      console.error(error);
     }
   };
 
