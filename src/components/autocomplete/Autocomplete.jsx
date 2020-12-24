@@ -1,19 +1,24 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { debounce } from "lodash";
 import DropDown from "../dropdown/Dropdown";
 import getSuggestions from "../../api/api";
+
+const KEYBOARD_KEYS = {
+  ENTER: 13,
+  UP_ARROW: 38,
+  DOWN_ARROW: 40,
+};
 
 const Autocomplete = () => {
   const [text, setText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [highlightedSuggestion, setHighlightedSuggestion] = useState(0);
   const inputRef = useRef();
+  const debouncedFunction = useCallback(debounce(getSuggestionsForWord, 400));
 
   const onInput = (event) => {
     const lastText = text.split(" ").slice(-1)[0];
     const textToSearch = event.target.value.split(" ").slice(-1)[0];
-
-    const debouncedFunction = debounce(getSuggestionsForWord, 400);
 
     setText(event.target.value);
 
@@ -50,19 +55,19 @@ const Autocomplete = () => {
 
     const keyPressed = e.which;
 
-    if (keyPressed === 38) {
+    if (keyPressed === KEYBOARD_KEYS.UP_ARROW) {
       setHighlightedSuggestion(
         highlightedSuggestion === 0
           ? suggestions.length - 1
           : highlightedSuggestion - 1
       );
-    } else if (keyPressed === 40) {
+    } else if (keyPressed === KEYBOARD_KEYS.DOWN_ARROW) {
       setHighlightedSuggestion(
         highlightedSuggestion === suggestions.length - 1
           ? 0
           : highlightedSuggestion + 1
       );
-    } else if (keyPressed === 13) {
+    } else if (keyPressed === KEYBOARD_KEYS.ENTER) {
       handleSelection(suggestions[highlightedSuggestion]);
     }
   };
