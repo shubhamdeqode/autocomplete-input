@@ -14,7 +14,7 @@ const Autocomplete = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [highlightedSuggestion, setHighlightedSuggestion] = useState(0);
   const inputRef = useRef();
-  const debouncedFunction = useCallback(debounce(getSuggestionsForWord, 400));
+  const debouncedFunction = useCallback(debounce(text => getSuggestionsForWord(text), 400), []);
 
   const onInput = (event) => {
     const lastText = text.split(" ").slice(-1)[0];
